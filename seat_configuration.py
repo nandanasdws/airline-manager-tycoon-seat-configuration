@@ -41,7 +41,7 @@ while valid < simulation:
 
 #Generate the Economy Seat
 #The formula is based on the average seat gap between each airplane
-    e = math.ceil(max_seat - (1.849617185 * b) - (4.497744588 * f))
+    e = math.ceil(max_seat - (1.8 * b) - (4.236 * f))
 
 #If the E < 0 it will redo again
     if e > 0:
