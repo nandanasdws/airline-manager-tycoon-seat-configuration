@@ -24,26 +24,36 @@ e_Ticket = int(input("E Ticket ($): "))
 b_Ticket = int(input("B Ticket ($): "))
 f_Ticket = int(input("F Ticket ($): "))
 
-#Input your desired amount of simulation
-simulation = 1000 #input your amount simulation here
+#Input how many simulation needed
+simulation = 1000
 valid = 0
 
-#I want to input the result into data frame therefore we can call it again
+#The result will be store here
 result = []
 
-#Simulation
-while valid < simulation:       #This is to generate the desired result so it can loop back to simulation
+#Let's put the condition here. I want it to only generate the E>0 because it is the valid condition
+while valid < simulation:
 
-#generate random value within the range for B
-    f = random.randint(1,f_cap) 
-#generate random value within the range for F
-    b = random.randint(1,b_cap)
+#Generate random seat capacity for Business and First class
+#I prioritize B and F seat first than try to calculate the E seat because it has the most space of all
+    b = random.randint(1,b_seat)
+    f = random.randint(1,f_seat)
 
-# This is the formula for Economy class
-    e = math.ceil(max_cap - (1.8 * b) - (4.236 * f))  
-#the desired results is >0
+#Generate the Economy Seat
+#The formula is based on the average seat gap between each class from various airplanes
+    e = math.ceil(max_seat - (1.8 * b) - (4.236 * f))
 
-#if the results <0, it will not store the results
+#If the E < 0 it will redo again
     if e > 0:
         valid += 1
-        print(e, b, f)
+
+#Calculate the total revenue for each option
+        revenue = (e * e_Ticket) + (b * b_Ticket) + (f * f_Ticket)
+
+#add the result to the dataframe
+        result.append((e, b, f, revenue))
+        
+#Showing the top 5 option
+df = pd.DataFrame(result, columns=["E", "B", "F", "Revenue"])
+top5 = df.sort_values("Revenue", ascending=False).head(5)
+print(top5)
